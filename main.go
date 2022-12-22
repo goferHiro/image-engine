@@ -3,9 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/google/gxui"
-	"github.com/google/gxui/drivers/gl"
-	"github.com/google/gxui/themes/dark"
 	"image"
 	"image/jpeg"
 	"net/http"
@@ -61,7 +58,7 @@ func splitImage(w http.ResponseWriter, r *http.Request) {
 
 			m = subimage
 
-			gl.StartDriver(show)
+			//gl.StartDriver(show)
 
 		}
 	}
@@ -85,7 +82,7 @@ func splitImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func show(driver gxui.Driver) {
+/*func show(driver gxui.Driver) {
 	theme := dark.CreateTheme(driver)
 	img := theme.CreateImage()
 	window := theme.CreateWindow(width, height, "Image viewer")
@@ -93,7 +90,7 @@ func show(driver gxui.Driver) {
 	img.SetTexture(texture)
 	window.AddChild(img)
 	window.OnClose(driver.Terminate)
-}
+}*/
 
 func main() {
 	fmt.Println("starting the server")
