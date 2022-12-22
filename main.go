@@ -2,10 +2,17 @@ package main
 
 import (
 	"bytes"
+	"fmt"
+	"github.com/google/gxui"
+	"github.com/google/gxui/drivers/gl"
+	"github.com/google/gxui/themes/dark"
 	"image"
 	"image/jpeg"
 	"net/http"
 )
+
+var width, height int
+var m image.Image
 
 func splitImage(w http.ResponseWriter, r *http.Request) {
 	// Decode the input image from the request body
@@ -52,6 +59,10 @@ func splitImage(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			m = subimage
+
+			gl.StartDriver(show)
+
 		}
 	}
 	//
@@ -74,7 +85,18 @@ func splitImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func show(driver gxui.Driver) {
+	theme := dark.CreateTheme(driver)
+	img := theme.CreateImage()
+	window := theme.CreateWindow(width, height, "Image viewer")
+	texture := driver.CreateTexture(m, 1.0)
+	img.SetTexture(texture)
+	window.AddChild(img)
+	window.OnClose(driver.Terminate)
+}
+
 func main() {
+	fmt.Println("starting the server")
 	http.HandleFunc("/split", splitImage)
 	http.ListenAndServe(":128", nil)
 }
